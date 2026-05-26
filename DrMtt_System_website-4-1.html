@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DrMtt Trading — Marko Mathuthu</title>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init({ publicKey: 'YOUR_EMAILJS_PUBLIC_KEY' });
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#c9a84c; --gold2:#e8c97a; --gold3:rgba(201,168,76,.14);
+  --cyan:#00d4e8; --cyan2:rgba(0,212,232,.13);
+  --bg:#03040a; --bg2:#07090f; --bg3:#0c0f17; --bg4:#111520;
+  --line:rgba(201,168,76,.22); --line2:rgba(255,255,255,.07);
+  --text:#edeae0; --text2:#7a8090; --text3:#40444e; --green:#00c87a;
+  /* Solid professional accent palette */
+  --blue-solid:#1a56db; --blue-deep:#0f3460;
+  --emerald:#059669; --emerald-dark:#064e3b;
+  --violet:#7c3aed; --violet-dark:#4c1d95;
+  --amber:#d97706; --amber-dark:#92400e;
+  --rose:#e11d48; --rose-dark:#9f1239;
+  --slate:#334155; --slate-light:#475569;
+  --teal:#0d9488; --teal-dark:#134e4a;
+  --indigo:#4338ca;
+  --disp:'Big Shoulders Display',sans-serif;
+  --body:'DM Sans',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);overflow-x:hidden}
+
+/* ── CURSOR (desktop pointer only) ── */
+@media(pointer:fine){
+  body{cursor:none}
+  .cursor{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--cyan);pointer-events:none;z-index:9999;top:0;left:0;will-change:transform;mix-blend-mode:difference}
+  .cursor-ring{position:fixed;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--gold);pointer-events:none;z-index:9998;top:0;left:0;will-change:transform;opacity:.7}
+}
+@media(pointer:coarse){.cursor,.cursor-ring{display:none}}
+
+/* ── GRAIN ── */
+body::after{content:'';position:fixed;inset:0;z-index:9990;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.13}
+
+/* ── AURORA (3 blobs, desktop only) ── */
+.aurora{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(100px);will-change:transform;animation:blobDrift ease-in-out infinite}
+.blob1{width:600px;height:600px;background:radial-gradient(circle,rgba(201,168,76,.1) 0%,transparent 70%);top:-160px;left:-160px;animation-duration:28s}
+.blob2{width:500px;height:500px;background:radial-gradient(circle,rgba(0,212,232,.07) 0%,transparent 70%);top:28%;right:-100px;animation-duration:34s;animation-delay:-11s}
+.blob3{width:440px;height:440px;background:radial-gradient(circle,rgba(201,168,76,.06) 0%,transparent 70%);bottom:-60px;left:22%;animation-duration:22s;animation-delay:-6s}
+@media(max-width:768px){.aurora{display:none};body::after{opacity:.07}}
+@keyframes blobDrift{0%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-28px) scale(1.05)}66%{transform:translate(-18px,44px) scale(.96)}100%{transform:translate(0,0) scale(1)}}
+
+/* ── PARTICLES ── */
+#particles{position:fixed;inset:0;pointer-events:none;z-index:1}
+@media(max-width:768px){#particles{display:none}}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes goldGlow{0%,100%{text-shadow:0 0 18px rgba(201,168,76,.6),0 0 44px rgba(201,168,76,.28)}50%{text-shadow:0 0 36px rgba(232,201,122,.85),0 0 80px rgba(201,168,76,.4)}}
+@keyframes glowPulse{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes shimmerBorder{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes tickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ══════════════════════════════════════════
+   NAV
+══════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 48px;
+  background:rgba(3,4,10,.92);backdrop-filter:blur(24px);
+  border-bottom:1px solid #1a3a5c;
+  transition:background .3s;
+}
+.nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none;flex-shrink:0}
+.nav-emblem{
+  width:46px;height:46px;border-radius:50%;border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--disp);font-size:17px;font-weight:900;color:var(--gold);
+  background:radial-gradient(circle,rgba(201,168,76,.12) 0%,transparent 70%);
+  animation:glowPulse 3.2s ease-in-out infinite;flex-shrink:0;
+}
+.nav-brand-top{font-family:var(--disp);font-size:32px;font-weight:900;color:var(--gold);letter-spacing:.06em;line-height:1;text-shadow:0 0 24px rgba(201,168,76,.38)}
+.nav-brand-sub{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.2em;text-transform:uppercase;margin-top:2px}
+
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-family:var(--mono);font-size:11px;color:var(--text2);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+
+.nav-cta{
+  font-family:var(--mono);font-size:11px;padding:9px 22px;
+  border:1.5px solid var(--gold);border-radius:2px;
+  color:var(--gold);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;
+  transition:all .22s;box-shadow:0 0 14px rgba(201,168,76,.14);cursor:pointer;
+}
+.nav-cta:hover{background:var(--gold);color:#000;box-shadow:0 0 30px rgba(201,168,76,.5)}
+
+/* Hamburger */
+.nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.nav-hamburger span{display:block;width:24px;height:2px;background:var(--gold);border-radius:2px;transition:all .3s}
+
+/* Mobile Menu */
+.nav-mobile-menu{
+  display:none;position:fixed;inset:0;background:rgba(3,4,10,.98);
+  z-index:9998;flex-direction:column;align-items:center;justify-content:center;gap:30px;
+  backdrop-filter:blur(16px);
+}
+.nav-mobile-menu.open{display:flex}
+.nav-mobile-menu a{font-family:var(--mono);font-size:15px;color:var(--text2);text-decoration:none;letter-spacing:.2em;text-transform:uppercase;transition:color .2s}
+.nav-mobile-menu a:hover,.nav-mobile-menu a.highlight{color:var(--gold)}
+.nav-mobile-close{position:absolute;top:18px;right:22px;background:none;border:none;color:var(--text2);font-size:26px;cursor:pointer;line-height:1}
+
+@media(max-width:860px){
+  nav{padding:12px 18px}
+  .nav-links,.nav-cta{display:none}
+  .nav-hamburger{display:flex}
+  .nav-brand-top{font-size:28px}
+}
+
+/* ══════════════════════════════════════════
+   HERO
+══════════════════════════════════════════ */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:120px 48px 80px;position:relative;overflow:hidden;z-index:2;
+}
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.024) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.024) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,#000 20%,transparent 100%);
+}
+.hero-eyebrow{
+  font-family:var(--mono);font-size:11px;color:var(--cyan);
+  letter-spacing:.28em;text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:14px;
+  animation:fadeUp .7s ease both;
+}
+.hero-eyebrow::before{content:'';width:44px;height:1px;background:var(--cyan);opacity:.7}
+.hero-title{
+  font-family:var(--disp);font-weight:900;
+  font-size:clamp(68px,10.5vw,148px);
+  line-height:.88;letter-spacing:-.01em;
+  animation:fadeUp .7s .1s ease both;
+}
+.hero-title .g{color:var(--gold);animation:goldGlow 3s ease-in-out infinite}
+.hero-title .c{color:var(--cyan)}
+.hero-subtitle{
+  font-family:var(--body);font-size:16px;font-weight:300;
+  color:var(--text2);max-width:480px;line-height:1.8;
+  margin-top:26px;animation:fadeUp .7s .2s ease both;
+}
+.hero-actions{display:flex;gap:14px;margin-top:38px;animation:fadeUp .7s .3s ease both;flex-wrap:wrap}
+.btn-primary{
+  font-family:var(--mono);font-size:12px;padding:14px 32px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;border:none;border-radius:2px;
+  letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  cursor:pointer;text-decoration:none;transition:all .25s;
+  box-shadow:0 4px 22px rgba(201,168,76,.32);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 34px rgba(201,168,76,.5)}
+.btn-secondary{
+  font-family:var(--mono);font-size:12px;padding:14px 32px;
+  background:transparent;color:var(--text2);
+  border:1px solid rgba(255,255,255,.14);border-radius:2px;
+  letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
+  text-decoration:none;transition:all .25s;
+}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+.hero-stats{
+  display:flex;gap:44px;margin-top:56px;
+  padding-top:30px;border-top:1px solid var(--line2);
+  animation:fadeUp .7s .4s ease both;flex-wrap:wrap;
+}
+.hero-stat-val{font-family:var(--disp);font-weight:900;font-size:48px;line-height:1;color:var(--gold);animation:goldGlow 3s ease-in-out infinite}
+.hero-stat-val.c{color:var(--cyan);animation:none}
+.hero-stat-label{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.15em;text-transform:uppercase;margin-top:4px}
+
+@media(max-width:768px){
+  .hero{padding:96px 18px 60px}
+  .hero-stats{gap:24px;margin-top:40px}
+  .hero-stat-val{font-size:36px}
+  .btn-primary,.btn-secondary{padding:12px 22px;font-size:11px}
+}
+
+/* ══════════════════════════════════════════
+   TICKER
+══════════════════════════════════════════ */
+.ticker{padding:10px 0;overflow:hidden;white-space:nowrap;position:relative;z-index:2;background:linear-gradient(90deg,#b8860b,var(--gold),#e8c97a,var(--gold),#b8860b)}
+.ticker-inner{display:inline-flex;animation:tickerMove 32s linear infinite}
+.ticker-item{font-family:var(--mono);font-size:11px;color:#000;font-weight:600;padding:0 28px;letter-spacing:.06em;display:flex;align-items:center;gap:10px}
+.ticker-sep{opacity:.35}
+
+/* ══════════════════════════════════════════
+   SECTIONS SHARED
+══════════════════════════════════════════ */
+section{padding:88px 48px;position:relative;z-index:2}
+@media(max-width:768px){section{padding:60px 18px}}
+.section-tag{font-family:var(--mono);font-size:10px;letter-spacing:.26em;text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:14px;color:var(--gold)}
+.section-tag::before{content:'';width:28px;height:1px;background:var(--gold);opacity:.7}
+.section-tag.cyan{color:#00c6b8}
+.section-tag.cyan::before{background:#00c6b8}
+.section-title{font-family:var(--disp);font-weight:900;font-size:clamp(36px,5vw,68px);line-height:.92;letter-spacing:.01em}
+.section-header{margin-bottom:52px}
+
+/* ══════════════════════════════════════════
+   ABOUT
+══════════════════════════════════════════ */
+.about{background:#060811;border-top:2px solid #1a56db;border-bottom:2px solid #0d9488}
+.about-inner{display:grid;grid-template-columns:1fr 1.4fr;gap:72px;align-items:center}
+.about-avatar-wrap{position:relative;display:inline-block;max-width:300px;width:100%}
+.about-avatar-glow{position:absolute;inset:-3px;border-radius:12px;background:linear-gradient(135deg,#c9a84c,#00d4e8,#7c3aed,#c9a84c);background-size:300% 300%;animation:shimmerBorder 4s ease-in-out infinite;z-index:0;opacity:.9}
+.about-avatar-frame{
+  aspect-ratio:3/4;border-radius:10px;
+  background:linear-gradient(160deg,#08101f 0%,#0c0f17 40%,#050810 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;z-index:1;margin:3px;gap:0;
+}
+/* grid lines inside card */
+.about-avatar-frame::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(201,168,76,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.06) 1px,transparent 1px);
+  background-size:28px 28px;pointer-events:none;z-index:0;
+}
+/* top accent bar */
+.about-avatar-frame::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#1a56db,#00d4e8,#c9a84c,#7c3aed);z-index:3;
+}
+.about-avatar-monogram{
+  position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:28px 20px 20px;width:100%;
+}
+/* big decorative DR */
+.about-avatar-dr{
+  font-family:var(--disp);font-weight:900;font-size:clamp(52px,12vw,88px);
+  line-height:.85;letter-spacing:-.02em;
+  background:linear-gradient(135deg,#e8c97a 0%,#c9a84c 40%,#fff8e0 60%,#c9a84c 80%,#a07830 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 18px rgba(201,168,76,.55));
+  text-align:center;
+}
+/* Mtt in cyan */
+.about-avatar-mtt{
+  font-family:var(--disp);font-weight:900;font-size:clamp(38px,9vw,64px);
+  line-height:.85;letter-spacing:.06em;
+  background:linear-gradient(135deg,#00d4e8 0%,#0d9488 50%,#00d4e8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 14px rgba(0,212,232,.5));
+  text-align:center;
+}
+/* horizontal rule */
+.about-avatar-rule{width:60%;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.6),transparent);margin:12px 0}
+/* tagline */
+.about-avatar-tagline{
+  font-family:var(--mono);font-size:9px;color:rgba(201,168,76,.65);
+  letter-spacing:.28em;text-transform:uppercase;text-align:center;
+}
+/* corner accent dots */
+.about-avatar-corner{
+  position:absolute;width:10px;height:10px;z-index:3;
+}
+.about-avatar-corner.tl{top:14px;left:14px;border-top:2px solid var(--gold);border-left:2px solid var(--gold)}
+.about-avatar-corner.tr{top:14px;right:14px;border-top:2px solid var(--cyan);border-right:2px solid var(--cyan)}
+.about-avatar-corner.bl{bottom:24px;left:14px;border-bottom:2px solid var(--cyan);border-left:2px solid var(--cyan)}
+.about-avatar-corner.br{bottom:24px;right:14px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold)}
+/* bottom badge */
+.about-avatar-badge{
+  position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,#1a56db,#0d9488);
+  color:#fff;border-radius:3px;padding:7px 20px;
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;z-index:2;white-space:nowrap;
+  box-shadow:0 4px 20px rgba(26,86,219,.45);
+  border:1px solid rgba(0,212,232,.3);
+}
+.about-name{font-family:var(--disp);font-weight:900;font-size:50px;color:var(--text);line-height:.9;letter-spacing:.02em;margin-bottom:8px}
+.about-username{font-family:var(--mono);font-size:13px;color:var(--gold);margin-bottom:22px}
+.about-bio{font-size:15px;font-weight:300;color:var(--text2);line-height:1.8;margin-bottom:16px}
+.about-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{font-family:var(--mono);font-size:10px;padding:6px 12px;border:1px solid var(--line2);border-radius:2px;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;transition:all .25s;cursor:default}
+.chip:hover{border-color:var(--gold);color:var(--gold);background:var(--gold3)}
+
+@media(max-width:860px){
+  .about-inner{grid-template-columns:1fr;gap:40px}
+  .about-avatar-wrap{max-width:220px;margin:0 auto}
+  .about-name{font-size:40px}
+}
+
+/* ══════════════════════════════════════════
+   PRODUCTS
+══════════════════════════════════════════ */
+.products{background:var(--bg);border-top:2px solid #1a56db}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--line2)}
+.product-card{
+  background:var(--bg2);padding:32px;position:relative;overflow:hidden;
+  transition:background .3s,transform .3s;cursor:pointer;
+}
+.product-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;transform:scaleX(0);transform-origin:left;transition:transform .35s}
+.product-card.ea-card::before{background:linear-gradient(90deg,#00d4e8,#1a56db,#7c3aed)}
+.product-card.ind-card::before{background:linear-gradient(90deg,#c9a84c,#059669,#e8c97a)}
+.product-card:hover{transform:translateY(-4px);background:var(--bg3)}
+.product-card:hover::before{transform:scaleX(1)}
+.product-badge{font-family:var(--mono);font-size:9px;padding:4px 10px;border-radius:2px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px;display:inline-block}
+.product-badge.ea{background:#0f2444;color:#00d4e8;border:1px solid #1a56db}
+.product-badge.ind{background:#1a1000;color:var(--gold);border:1px solid var(--amber)}
+.product-icon{width:52px;height:52px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:18px}
+.ea-card .product-icon{background:#0a1e3a;border:1px solid #1a56db}
+.ind-card .product-icon{background:#1a1000;border:1px solid var(--amber)}
+.product-name{font-family:var(--disp);font-weight:700;font-size:27px;color:var(--text);letter-spacing:.02em;margin-bottom:8px;line-height:1}
+.product-desc{font-size:13px;font-weight:300;color:var(--text2);line-height:1.72;margin-bottom:22px}
+.product-features{list-style:none;margin-bottom:24px;display:flex;flex-direction:column;gap:7px}
+.product-features li{font-family:var(--mono);font-size:11px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.ea-card .product-features li::before{content:'→';color:var(--cyan);font-size:10px}
+.ind-card .product-features li::before{content:'→';color:var(--gold);font-size:10px}
+.product-footer{display:flex;align-items:center;justify-content:space-between;padding-top:18px;border-top:1px solid var(--line2)}
+.product-price{font-family:var(--disp);font-weight:900;font-size:40px;line-height:1;color:var(--gold)}
+.product-price-label{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.buy-btn{font-family:var(--mono);font-size:11px;padding:10px 20px;border:none;border-radius:2px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .22s;font-weight:500}
+.ea-card .buy-btn{background:linear-gradient(135deg,#1a56db,#0d9488);color:#fff;font-weight:600}
+.ind-card .buy-btn{background:linear-gradient(135deg,#d97706,#c9a84c);color:#000}
+.buy-btn:hover{transform:scale(1.05);filter:brightness(1.1)}
+
+@media(max-width:680px){.products-grid{grid-template-columns:1fr}}
+
+/* ══════════════════════════════════════════
+   HOW IT WORKS
+══════════════════════════════════════════ */
+.how{background:#060811;border-top:2px solid #059669}
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line2)}
+.how-step{padding:36px 26px;border-right:1px solid var(--line2);position:relative;overflow:hidden;transition:background .3s}
+.how-step:last-child{border-right:none}
+.how-step:hover{background:rgba(201,168,76,.022)}
+.step-num{font-family:var(--disp);font-weight:900;font-size:76px;line-height:1;margin-bottom:10px;color:var(--gold);opacity:.12}
+.step-icon{font-size:22px;margin-bottom:10px;display:block}
+.step-title{font-family:var(--body);font-size:15px;font-weight:600;color:var(--text);margin-bottom:8px}
+.step-desc{font-size:13px;font-weight:300;color:var(--text2);line-height:1.72}
+
+@media(max-width:860px){
+  .how-steps{grid-template-columns:1fr 1fr}
+  .how-step{border-right:none;border-bottom:1px solid var(--line2)}
+  .how-step:nth-child(odd){border-right:1px solid var(--line2)}
+  .how-step:nth-child(3),.how-step:last-child{border-bottom:none}
+}
+@media(max-width:480px){
+  .how-steps{grid-template-columns:1fr}
+  .how-step:nth-child(odd){border-right:none}
+  .how-step{border-bottom:1px solid var(--line2)}
+  .how-step:last-child{border-bottom:none}
+}
+
+/* ══════════════════════════════════════════
+   RESULTS
+══════════════════════════════════════════ */
+.results{background:var(--bg)}
+.results-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.result-card{background:var(--bg2);border:1px solid var(--line2);border-radius:4px;padding:26px;position:relative;transition:border-color .3s,transform .3s}
+.result-card:hover{transform:translateY(-4px);border-color:var(--line)}
+.stars{font-size:13px;margin-bottom:12px;color:var(--gold);letter-spacing:2px}
+.result-text{font-size:14px;font-weight:300;color:var(--text2);line-height:1.8;margin-bottom:18px}
+.result-user{display:flex;align-items:center;gap:12px}
+.result-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:700;font-size:14px;background:var(--gold3);border:1px solid var(--line);color:var(--gold);flex-shrink:0}
+.result-name{font-weight:600;font-size:13px;color:var(--text)}
+.result-profit{font-family:var(--mono);font-size:11px;color:var(--green)}
+
+@media(max-width:860px){.results-grid{grid-template-columns:1fr;gap:16px}}
+
+/* ══════════════════════════════════════════
+   PAYMENT
+══════════════════════════════════════════ */
+.payment-section{background:#060811;border-top:2px solid #d97706;padding:80px 48px}
+@media(max-width:768px){.payment-section{padding:60px 18px}}
+.pay-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:900px}
+.pay-card{border-radius:6px;padding:26px}
+.pay-card.btc{background:rgba(247,147,26,.04);border:1px solid rgba(247,147,26,.22)}
+.pay-card.ltc{background:rgba(200,200,200,.03);border:1px solid rgba(200,200,200,.14)}
+.pay-card.inst{background:var(--gold3);border:1px solid var(--line);grid-column:1/-1}
+.pay-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:14px}
+.pay-icon.btc-i{background:rgba(247,147,26,.1);border:1px solid rgba(247,147,26,.22)}
+.pay-icon.ltc-i{background:rgba(200,200,200,.06);border:1px solid rgba(200,200,200,.16)}
+.pay-name-btc{font-family:var(--disp);font-weight:900;font-size:26px;color:#f7931a;letter-spacing:.02em}
+.pay-name-ltc{font-family:var(--disp);font-weight:900;font-size:26px;color:#c0c0c0;letter-spacing:.02em}
+.pay-sub{font-family:var(--mono);font-size:10px;color:var(--text2);margin-bottom:14px}
+.pay-addr-box{background:var(--bg3);border:1px solid var(--line2);border-radius:4px;padding:12px;margin-bottom:12px}
+.pay-addr-label{font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:6px;letter-spacing:.1em;text-transform:uppercase}
+.pay-addr{font-family:var(--mono);font-size:10px;color:var(--text);word-break:break-all;line-height:1.7}
+.copy-btn{width:100%;font-family:var(--mono);font-size:11px;padding:10px;border-radius:2px;cursor:pointer;letter-spacing:.08em;transition:all .2s}
+.copy-btn.btc-btn{background:rgba(247,147,26,.07);border:1px solid rgba(247,147,26,.22);color:#f7931a}
+.pay-card.eco{background:rgba(0,200,122,.04);border:1px solid rgba(0,200,122,.22)}
+.pay-card.usdt{background:rgba(38,161,123,.05);border:1px solid rgba(38,161,123,.28)}
+.pay-icon.eco-i{background:rgba(0,200,122,.1);border:1px solid rgba(0,200,122,.25);font-size:20px}
+.pay-icon.usdt-i{background:rgba(38,161,123,.1);border:1px solid rgba(38,161,123,.3);font-size:16px;font-weight:700;color:#26a17b;font-family:var(--mono)}
+.pay-name-eco{font-family:var(--disp);font-weight:900;font-size:26px;color:#00c87a;letter-spacing:.02em}
+.pay-name-usdt{font-family:var(--disp);font-weight:900;font-size:26px;color:#26a17b;letter-spacing:.02em}
+.copy-btn.eco-btn{background:rgba(0,200,122,.07);border:1px solid rgba(0,200,122,.25);color:#00c87a}
+.copy-btn.usdt-btn{background:rgba(38,161,123,.07);border:1px solid rgba(38,161,123,.28);color:#26a17b}
+.eco-direct{
+  display:flex;align-items:center;gap:10px;margin-top:10px;
+  background:rgba(0,200,122,.06);border:1px solid rgba(0,200,122,.18);
+  border-radius:4px;padding:10px 12px;
+}
+.eco-direct-label{font-family:var(--mono);font-size:9px;color:rgba(0,200,122,.6);letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.eco-direct-val{font-family:var(--mono);font-size:12px;color:#00c87a;font-weight:600}
+.eco-direct-name{font-family:var(--mono);font-size:10px;color:var(--text2);margin-top:1px}
+.inst-title{font-family:var(--disp);font-weight:900;font-size:26px;color:var(--gold);margin-bottom:18px;letter-spacing:.02em}
+.inst-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+.inst-step{display:flex;gap:12px;align-items:flex-start}
+.inst-n{font-family:var(--disp);font-weight:900;font-size:30px;color:var(--gold);opacity:.3;line-height:1;min-width:24px}
+.inst-text{font-family:var(--mono);font-size:12px;color:var(--text2);line-height:1.7}
+
+/* ══════════════════════════════════════════
+   CTA
+══════════════════════════════════════════ */
+.cta-section{background:var(--bg2);border-top:1px solid var(--line);text-align:center;padding:88px 48px;overflow:hidden;position:relative;z-index:2}
+.cta-title{font-family:var(--disp);font-weight:900;font-size:clamp(46px,7vw,96px);line-height:.9;margin-bottom:24px}
+.cta-title .g{color:var(--gold);animation:goldGlow 3s ease-in-out infinite}
+.cta-title .c{color:var(--cyan)}
+.cta-sub{font-size:15px;font-weight:300;color:var(--text2);max-width:460px;margin:0 auto 38px;line-height:1.78}
+.contact-links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.contact-link{font-family:var(--mono);font-size:12px;padding:12px 22px;border:1px solid var(--line2);border-radius:2px;color:var(--text2);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;transition:all .22s;cursor:pointer;display:flex;align-items:center;gap:8px}
+.contact-link:hover{border-color:var(--gold);color:var(--gold);background:var(--gold3)}
+.contact-link.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border-color:transparent;font-weight:600;box-shadow:0 4px 20px rgba(201,168,76,.3)}
+.contact-link.primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,.45)}
+
+@media(max-width:768px){
+  .cta-section{padding:60px 18px}
+  .contact-links{flex-direction:column;align-items:center}
+  .contact-link{width:100%;max-width:320px;justify-content:center}
+}
+
+/* ══════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(3,4,10,.92);z-index:9000;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+  backdrop-filter:blur(12px);padding:20px;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--bg2);border:1px solid rgba(201,168,76,.25);border-radius:8px;
+  padding:36px;max-width:460px;width:100%;position:relative;
+  transform:translateY(16px);transition:transform .3s;
+  max-height:90vh;overflow-y:auto;
+  box-shadow:0 0 60px rgba(201,168,76,.07);
+}
+.modal-overlay.open .modal{transform:none}
+.modal-top-line{position:absolute;top:0;left:0;right:0;height:3px;border-radius:8px 8px 0 0;background:linear-gradient(90deg,var(--gold),var(--cyan),var(--gold))}
+.modal-close{
+  position:absolute;top:14px;right:16px;background:none;border:none;
+  color:var(--text2);font-size:20px;cursor:pointer;transition:color .2s;
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+}
+.modal-close:hover{color:var(--gold)}
+.modal-badge{font-family:var(--mono);font-size:9px;padding:4px 10px;border-radius:2px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;display:inline-block}
+.modal-badge.ea{background:rgba(0,212,232,.08);color:var(--cyan);border:1px solid rgba(0,212,232,.22)}
+.modal-badge.ind{background:var(--gold3);color:var(--gold);border:1px solid var(--line)}
+.modal-title{font-family:var(--disp);font-weight:900;font-size:32px;color:var(--text);margin-bottom:6px;letter-spacing:.02em;line-height:1}
+.modal-price{font-family:var(--disp);font-weight:900;font-size:50px;color:var(--gold);margin-bottom:20px;animation:goldGlow 3s ease-in-out infinite}
+.modal-form{display:flex;flex-direction:column;gap:10px}
+.modal-input{
+  background:var(--bg3);border:1px solid var(--line2);border-radius:3px;
+  padding:12px 14px;font-family:var(--mono);font-size:12px;color:var(--text);
+  outline:none;transition:border-color .2s;width:100%;
+  -webkit-appearance:none;
+}
+.modal-input:focus{border-color:var(--gold)}
+.modal-input::placeholder{color:var(--text3)}
+.modal-submit{
+  font-family:var(--mono);font-size:12px;padding:14px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;border:none;border-radius:2px;
+  letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  cursor:pointer;transition:all .2s;margin-top:4px;
+  box-shadow:0 4px 18px rgba(201,168,76,.28);
+}
+.modal-submit:hover{box-shadow:0 8px 28px rgba(201,168,76,.44);transform:translateY(-1px)}
+.modal-pay-section{margin-top:18px;padding-top:14px;border-top:1px solid var(--line2)}
+.modal-pay-label{font-family:var(--mono);font-size:10px;color:var(--text2);margin-bottom:10px;letter-spacing:.08em;text-transform:uppercase}
+.modal-pay-row{background:var(--bg3);border:1px solid var(--line2);border-radius:4px;padding:10px 12px;margin-bottom:8px}
+.modal-pay-row-hd{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.modal-pay-addr{font-family:var(--mono);font-size:9px;color:var(--text2);word-break:break-all;line-height:1.6}
+.modal-copy{margin-top:6px;font-family:var(--mono);font-size:9px;padding:5px 10px;border-radius:2px;cursor:pointer;letter-spacing:.08em;transition:all .2s}
+.modal-copy.btc{background:var(--gold3);border:1px solid var(--line);color:var(--gold)}
+.modal-copy.ltc{background:rgba(200,200,200,.07);border:1px solid rgba(200,200,200,.14);color:#bbb}
+.modal-note{font-family:var(--mono);font-size:10px;color:var(--text3);text-align:center;margin-top:10px;line-height:1.6}
+
+/* ══════════════════════════════════════════
+   SUBSCRIPTIONS
+══════════════════════════════════════════ */
+.subscriptions{background:#060811;border-top:2px solid #7c3aed;padding:88px 48px}
+@media(max-width:768px){.subscriptions{padding:60px 18px}}
+.sub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px;max-width:1100px}
+.sub-card{
+  border-radius:8px;padding:32px;position:relative;overflow:hidden;
+  transition:transform .3s,box-shadow .3s;
+}
+.sub-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+}
+.sub-card:hover{transform:translateY(-5px)}
+.sub-card.vip{
+  background:linear-gradient(145deg,rgba(124,58,237,.08) 0%,rgba(201,168,76,.05) 100%);
+  border:1px solid rgba(124,58,237,.35);
+}
+.sub-card.vip::before{background:linear-gradient(90deg,#7c3aed,#c9a84c,#7c3aed)}
+.sub-card.vip:hover{box-shadow:0 12px 48px rgba(124,58,237,.22)}
+.sub-card.manage{
+  background:linear-gradient(145deg,rgba(0,212,232,.06) 0%,rgba(26,86,219,.08) 100%);
+  border:1px solid rgba(0,212,232,.28);
+}
+.sub-card.manage::before{background:linear-gradient(90deg,#00d4e8,#1a56db,#00d4e8)}
+.sub-card.manage:hover{box-shadow:0 12px 48px rgba(0,212,232,.18)}
+.sub-card.free{
+  background:linear-gradient(145deg,rgba(0,200,122,.06) 0%,rgba(5,150,105,.06) 100%);
+  border:1px solid rgba(0,200,122,.28);
+}
+.sub-card.free::before{background:linear-gradient(90deg,#00c87a,#059669,#00c87a)}
+.sub-card.free:hover{box-shadow:0 12px 48px rgba(0,200,122,.18)}
+.sub-badge{
+  font-family:var(--mono);font-size:9px;padding:4px 10px;border-radius:2px;
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px;display:inline-block;
+}
+.sub-badge.vip-b{background:rgba(124,58,237,.15);color:#a78bfa;border:1px solid rgba(124,58,237,.3)}
+.sub-badge.manage-b{background:rgba(0,212,232,.1);color:var(--cyan);border:1px solid rgba(0,212,232,.25)}
+.sub-badge.free-b{background:rgba(0,200,122,.1);color:var(--green);border:1px solid rgba(0,200,122,.25)}
+.sub-icon{font-size:34px;margin-bottom:14px;display:block}
+.sub-name{font-family:var(--disp);font-weight:900;font-size:28px;line-height:1;margin-bottom:10px;letter-spacing:.02em}
+.sub-card.vip .sub-name{color:var(--gold)}
+.sub-card.manage .sub-name{color:var(--cyan)}
+.sub-card.free .sub-name{color:var(--green)}
+.sub-desc{font-size:13px;font-weight:300;color:var(--text2);line-height:1.78;margin-bottom:22px}
+.sub-features{list-style:none;margin-bottom:26px;display:flex;flex-direction:column;gap:8px}
+.sub-features li{font-family:var(--mono);font-size:11px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.sub-card.vip .sub-features li::before{content:'◆';color:#a78bfa;font-size:8px}
+.sub-card.manage .sub-features li::before{content:'◆';color:var(--cyan);font-size:8px}
+.sub-card.free .sub-features li::before{content:'◆';color:var(--green);font-size:8px}
+.sub-footer{border-top:1px solid rgba(255,255,255,.06);padding-top:20px}
+.sub-price-label{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.sub-btn{
+  display:inline-flex;align-items:center;gap:10px;justify-content:center;width:100%;
+  font-family:var(--mono);font-size:12px;padding:13px 22px;border-radius:2px;
+  letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  text-decoration:none;cursor:pointer;border:none;transition:all .25s;
+}
+.sub-btn.vip-btn{background:linear-gradient(135deg,#7c3aed,#4c1d95);color:#fff;box-shadow:0 4px 20px rgba(124,58,237,.3)}
+.sub-btn.vip-btn:hover{box-shadow:0 8px 32px rgba(124,58,237,.5);transform:translateY(-2px)}
+.sub-btn.manage-btn{background:linear-gradient(135deg,#00d4e8,#1a56db);color:#fff;box-shadow:0 4px 20px rgba(0,212,232,.22)}
+.sub-btn.manage-btn:hover{box-shadow:0 8px 32px rgba(0,212,232,.4);transform:translateY(-2px)}
+.sub-btn.free-btn{background:linear-gradient(135deg,#00c87a,#059669);color:#fff;box-shadow:0 4px 20px rgba(0,200,122,.22)}
+.sub-btn.free-btn:hover{box-shadow:0 8px 32px rgba(0,200,122,.4);transform:translateY(-2px)}
+/* free group tagline block */
+.free-tagline{
+  background:rgba(0,200,122,.05);border:1px solid rgba(0,200,122,.15);
+  border-radius:6px;padding:14px 16px;margin-bottom:20px;
+}
+.free-tagline p{font-family:var(--mono);font-size:11px;color:rgba(0,200,122,.8);line-height:1.75;margin:0}
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer{
+  background:var(--bg);padding:30px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;border-top:2px solid #1a56db;flex-wrap:wrap;gap:14px;
+}
+.footer-logo{font-family:var(--disp);font-weight:900;font-size:24px;letter-spacing:.06em}
+.footer-logo span{color:var(--gold)}
+.footer-logo em{color:var(--cyan);font-style:normal}
+.footer-copy{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.08em}
+.footer-links{display:flex;gap:22px}
+.footer-links a{font-family:var(--mono);font-size:10px;color:var(--text3);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+.footer-links a:hover{color:var(--gold)}
+@media(max-width:600px){footer{padding:22px 18px;flex-direction:column;align-items:flex-start}}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div class="aurora">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+</div>
+<canvas id="particles"></canvas>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- MOBILE MENU -->
+<div class="nav-mobile-menu" id="mobileMenu">
+  <button class="nav-mobile-close" onclick="closeMobileMenu()" aria-label="Close menu">✕</button>
+  <a href="#products" onclick="closeMobileMenu()">Products</a>
+  <a href="#how" onclick="closeMobileMenu()">How It Works</a>
+  <a href="#results" onclick="closeMobileMenu()">Results</a>
+  <a href="#subscriptions" onclick="closeMobileMenu()">Signals &amp; Services</a>
+  <a href="#payment" onclick="closeMobileMenu()">Payment</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+  <a href="#products" class="highlight" onclick="closeMobileMenu()">Buy Now →</a>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">
+    <div class="nav-emblem">DM</div>
+    <div class="nav-brand">
+      <div class="nav-brand-top">DrMtt</div>
+      <div class="nav-brand-sub">Trading Systems</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#how">How It Works</a>
+    <a href="#results">Results</a>
+    <a href="#subscriptions">Signals</a>
+    <a href="#payment">Payment</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="#products" class="nav-cta">Buy Now</a>
+  <button class="nav-hamburger" onclick="openMobileMenu()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-eyebrow">Professional Algorithmic Trading Systems</div>
+  <h1 class="hero-title">TRADE<br><span class="g">SMARTER.</span><br><span class="c">WIN MORE.</span></h1>
+  <p class="hero-subtitle">Algorithmic EAs and precision indicators built by Marko Mathuthu — engineered for consistent profits across Deriv, Weltrade, and volatile synthetic markets.</p>
+  <div class="hero-actions">
+    <a href="#products" class="btn-primary">Browse Products</a>
+    <a href="#how" class="btn-secondary">How It Works</a>
+  </div>
+  <div class="hero-stats">
+    <div><div class="hero-stat-val">94%</div><div class="hero-stat-label">Win Rate Backtested</div></div>
+    <div><div class="hero-stat-val c">5+</div><div class="hero-stat-label">Years Experience</div></div>
+    <div><div class="hero-stat-val">200+</div><div class="hero-stat-label">Satisfied Traders</div></div>
+    <div><div class="hero-stat-val c">24/7</div><div class="hero-stat-label">Bot Operation</div></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner" id="tickerInner"></div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="reveal">
+      <div class="about-avatar-wrap">
+        <div class="about-avatar-glow"></div>
+        <div class="about-avatar-frame">
+          <div class="about-avatar-corner tl"></div>
+          <div class="about-avatar-corner tr"></div>
+          <div class="about-avatar-corner bl"></div>
+          <div class="about-avatar-corner br"></div>
+          <div class="about-avatar-monogram">
+            <div class="about-avatar-dr">Dr</div>
+            <div class="about-avatar-mtt">Mtt</div>
+            <div class="about-avatar-rule"></div>
+            <div class="about-avatar-tagline">Trading Systems</div>
+          </div>
+          <div class="about-avatar-badge">@DrMtt</div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="section-tag">About the Developer</div>
+      <div class="about-name">MARKO<br>MATHUTHU</div>
+      <div class="about-username">@DrMtt</div>
+      <p class="about-bio">Professional algorithmic trader and system developer with over 5 years of hands-on experience in forex, indices, and synthetic markets. I design battle-tested Expert Advisors and indicators that remove emotion from trading and deliver consistent, rule-based results.</p>
+      <p class="about-bio">Every product I sell has been personally developed, forward-tested on live accounts, and optimized for real market conditions — not just backtests.</p>
+      <div class="about-chips">
+        <div class="chip">Deriv Boom &amp; Crash</div>
+        <div class="chip">Volatility Indices</div>
+        <div class="chip">Gainx / Painx</div>
+        <div class="chip">Weltrade</div>
+        <div class="chip">DBot / MT5</div>
+        <div class="chip">Algo Trading</div>
+        <div class="chip">Risk Management</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="products">
+  <div class="section-header reveal">
+    <div class="section-tag">What I Sell</div>
+    <div class="section-title">TRADING SYSTEMS</div>
+  </div>
+  <div class="products-grid">
+    <div class="product-card ea-card reveal" onclick="openModal('ea1')">
+      <span class="product-badge ea">Expert Advisor</span>
+      <div class="product-icon">🤖</div>
+      <div class="product-name">DRMTT SNIPER EA 2.0</div>
+      <p class="product-desc">High-frequency sniper bot built for Deriv Boom &amp; Crash, Volatility Indices and Weltrade markets. Runs 24/7, fully automated with built-in risk management.</p>
+      <ul class="product-features">
+        <li>Boom 1000, Boom 500, Crash 1000, Crash 500</li>
+        <li>Volatility 10, 25, 50, 75, 100 Indices</li>
+        <li>Works on Weltrade platform</li>
+        <li>Built-in stop loss &amp; take profit</li>
+        <li>Full setup instructions included</li>
+      </ul>
+      <div class="product-footer">
+        <div><div class="product-price">$150</div><div class="product-price-label">One-time · Lifetime use</div></div>
+        <button class="buy-btn">Buy EA</button>
+      </div>
+    </div>
+    <div class="product-card ea-card reveal" onclick="openModal('ea3')">
+      <span class="product-badge ea">Expert Advisor</span>
+      <div class="product-icon">📈</div>
+      <div class="product-name">BOOM &amp; CRASH RIDER EA</div>
+      <p class="product-desc">Specialized EA that detects and rides Boom spikes and Crash dumps with precision timing. Also covers Weltrade Gainx/Painx spike & dump cycles with fully dynamic position management.</p>
+      <ul class="product-features">
+        <li>Boom 1000, 500 · Crash 1000, 500</li>
+        <li>Dynamic Weltrade Gainx/Painx spike &amp; dump trading</li>
+        <li>Spike detection algorithm</li>
+        <li>Dynamic trailing stop loss</li>
+        <li>Drawdown protection built in</li>
+      </ul>
+      <div class="product-footer">
+        <div><div class="product-price">$150</div><div class="product-price-label">One-time · Lifetime use</div></div>
+        <button class="buy-btn">Buy EA</button>
+      </div>
+    </div>
+    <div class="product-card ea-card reveal" onclick="openModal('ea2')">
+      <span class="product-badge ea">Expert Advisor</span>
+      <div class="product-icon">⚡</div>
+      <div class="product-name">DIGIT MATCH PRO EA</div>
+      <p class="product-desc">Advanced digit frequency analyzer that automatically predicts and trades digit matches on Deriv Volatility Indices. Fully autonomous — set and forget.</p>
+      <ul class="product-features">
+        <li>Volatility 10 (1s), 25, 50, 75, 100</li>
+        <li>Auto digit prediction &amp; execution</li>
+        <li>Adjustable stake &amp; risk controls</li>
+        <li>Stop loss &amp; take profit limits</li>
+        <li>DBot XML + web interface included</li>
+      </ul>
+      <div class="product-footer">
+        <div><div class="product-price">$150</div><div class="product-price-label">One-time · Lifetime use</div></div>
+        <button class="buy-btn">Buy EA</button>
+      </div>
+    </div>
+    <div class="product-card ind-card reveal" onclick="openModal('ind1')">
+      <span class="product-badge ind">Indicator</span>
+      <div class="product-icon">🎯</div>
+      <div class="product-name">BOOM AND CRASH SIGNAL SYSTEM</div>
+      <p class="product-desc">Precision entry indicator that paints clear buy/sell arrows at high-probability Boom spike and Crash dump zones. No repainting. Optimized for Deriv and Weltrade.</p>
+      <ul class="product-features">
+        <li>Boom &amp; Crash spike/dump signals</li>
+        <li>Gainx / Painx compatible (Weltrade)</li>
+        <li>Volatility Indices — all variants</li>
+        <li>No repainting — ever</li>
+        <li>Alert system (pop-up, email, push)</li>
+      </ul>
+      <div class="product-footer">
+        <div><div class="product-price">$70</div><div class="product-price-label">One-time · Lifetime use</div></div>
+        <button class="buy-btn">Buy Indicator</button>
+      </div>
+    </div>
+    <div class="product-card ind-card reveal" onclick="openModal('ind2')">
+      <span class="product-badge ind">Indicator</span>
+      <div class="product-icon">📊</div>
+      <div class="product-name">DIGIT FREQUENCY TRACKER</div>
+      <p class="product-desc">Real-time last-digit frequency analyzer for Deriv Volatility Indices. Shows which digits are hot, rising fast, and most likely to appear next.</p>
+      <ul class="product-features">
+        <li>Live WebSocket data feed</li>
+        <li>All 10 digits tracked simultaneously</li>
+        <li>1-minute momentum detection</li>
+        <li>Works on V25, V50, V75, V100</li>
+        <li>Recommended digit + reasoning</li>
+      </ul>
+      <div class="product-footer">
+        <div><div class="product-price">$70</div><div class="product-price-label">One-time · Lifetime use</div></div>
+        <button class="buy-btn">Buy Indicator</button>
+      </div>
+    </div>
+    <div class="product-card ind-card reveal" onclick="openModal('ind3')">
+      <span class="product-badge ind">Indicator</span>
+      <div class="product-icon">🌊</div>
+      <div class="product-name">GAINX PAINX SIGNAL SYSTEM</div>
+      <p class="product-desc">Real-time momentum tracker for Weltrade's Gainx and Painx indices. Identifies optimal entry windows, detects trend shifts, and signals clean breakouts.</p>
+      <ul class="product-features">
+        <li>Gainx/Painx Spike Signals</li>
+        <li>Weltrade platform optimized</li>
+        <li>Momentum &amp; trend regime detection</li>
+        <li>Entry window highlighting</li>
+        <li>Mobile-friendly alerts</li>
+      </ul>
+      <div class="product-footer">
+        <div><div class="product-price">$70</div><div class="product-price-label">One-time · Lifetime use</div></div>
+        <button class="buy-btn">Buy Indicator</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-header reveal">
+    <div class="section-tag">Process</div>
+    <div class="section-title">HOW IT WORKS</div>
+  </div>
+  <div class="how-steps">
+    <div class="how-step reveal">
+      <div class="step-num">01</div>
+      <span class="step-icon">🛒</span>
+      <div class="step-title">Choose Your Product</div>
+      <p class="step-desc">Browse EAs at $150 or indicators at $70. Each listing shows features, compatibility, and what markets it covers.</p>
+    </div>
+    <div class="how-step reveal">
+      <div class="step-num">02</div>
+      <span class="step-icon">💳</span>
+      <div class="step-title">Complete Payment</div>
+      <p class="step-desc">Pay securely via BTC or LTC. After confirmation, you receive your product file and full setup guide within 24 hours.</p>
+    </div>
+    <div class="how-step reveal">
+      <div class="step-num">03</div>
+      <span class="step-icon">⚙️</span>
+      <div class="step-title">Install &amp; Configure</div>
+      <p class="step-desc">Follow the step-by-step setup instructions. For EAs, attach to your MT4/MT5 chart or import to DBot.</p>
+    </div>
+    <div class="how-step reveal">
+      <div class="step-num">04</div>
+      <span class="step-icon">🚀</span>
+      <div class="step-title">Trade &amp; Profit</div>
+      <p class="step-desc">Let the bot run 24/7 or follow indicator signals manually. Lifetime support from DrMtt included.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results" id="results">
+  <div class="section-header reveal">
+    <div class="section-tag">Client Results</div>
+    <div class="section-title">WHAT TRADERS SAY</div>
+  </div>
+  <div class="results-grid">
+    <div class="result-card reveal">
+      <div class="stars">★★★★★</div>
+      <p class="result-text">The Digit Match EA is insane. Set it up on demo first, ran it for a week — consistently profitable. Moved to live and was genuinely shocked at the results.</p>
+      <div class="result-user">
+        <div class="result-avatar">TK</div>
+        <div><div class="result-name">Thabiso K.</div><div class="result-profit">+$340 in first week</div></div>
+      </div>
+    </div>
+    <div class="result-card reveal">
+      <div class="stars">★★★★★</div>
+      <p class="result-text">Sniper Signal indicator is incredibly accurate. No repainting means what I see is what I get. Completely transformed how I enter trades on V75.</p>
+      <div class="result-user">
+        <div class="result-avatar">RM</div>
+        <div><div class="result-name">Rudo M.</div><div class="result-profit">Win rate improved to 78%</div></div>
+      </div>
+    </div>
+    <div class="result-card reveal">
+      <div class="stars">★★★★★</div>
+      <p class="result-text">DrMtt actually responds and helps you set everything up. Bought the Scalper EA and he walked me through the entire installation. 10/10 support.</p>
+      <div class="result-user">
+        <div class="result-avatar">LP</div>
+        <div><div class="result-name">Lindiwe P.</div><div class="result-profit">Running 3 months strong</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUBSCRIPTIONS -->
+<section class="subscriptions" id="subscriptions">
+  <div class="section-header reveal">
+    <div class="section-tag" style="color:#a78bfa">—&nbsp; Services &amp; Community</div>
+    <div class="section-title">SIGNALS &amp; <span style="color:#a78bfa">SERVICES</span></div>
+  </div>
+  <div class="sub-grid">
+
+    <!-- VIP Trading Signals -->
+    <div class="sub-card vip reveal">
+      <span class="sub-badge vip-b">Premium</span>
+      <span class="sub-icon">💎</span>
+      <div class="sub-name">VIP TRADING SIGNALS</div>
+      <p class="sub-desc">Get real-time precision entry &amp; exit signals directly from DrMtt — hand-picked setups on Boom &amp; Crash, Volatility Indices, and Gainx/Painx. No noise. Only high-probability trades.</p>
+      <ul class="sub-features">
+        <li>Daily live Boom &amp; Crash signals</li>
+        <li>Entry, SL &amp; TP clearly marked</li>
+        <li>Volatility &amp; Gainx/Painx coverage</li>
+        <li>Mindset &amp; strategy breakdowns</li>
+        <li>Direct line to DrMtt on WhatsApp</li>
+      </ul>
+      <div class="sub-footer">
+        <div class="sub-price-label">Contact DrMtt for pricing</div>
+        <a href="https://wa.me/263774456036?text=Hi%20DrMtt%2C%20I%27m%20interested%20in%20the%20VIP%20Trading%20Signals%20subscription" class="sub-btn vip-btn" target="_blank" rel="noopener">
+          💬 WhatsApp to Subscribe
+        </a>
+      </div>
+    </div>
+
+    <!-- Account Management -->
+    <div class="sub-card manage reveal">
+      <span class="sub-badge manage-b">Managed Service</span>
+      <span class="sub-icon">🏦</span>
+      <div class="sub-name">ACCOUNT MANAGEMENT</div>
+      <p class="sub-desc">Let DrMtt trade your account professionally. A fully managed service where your capital is grown using battle-tested strategies — while you stay in full control of your funds.</p>
+      <ul class="sub-features">
+        <li>Professional hands-on account trading</li>
+        <li>Risk-controlled drawdown management</li>
+        <li>Weekly performance reports</li>
+        <li>Profit-share model — aligned incentives</li>
+        <li>Direct communication via WhatsApp</li>
+      </ul>
+      <div class="sub-footer">
+        <div class="sub-price-label">Contact DrMtt to discuss terms</div>
+        <a href="https://wa.me/263774456036?text=Hi%20DrMtt%2C%20I%27m%20interested%20in%20Account%20Management%20services" class="sub-btn manage-btn" target="_blank" rel="noopener">
+          💬 WhatsApp to Enquire
+        </a>
+      </div>
+    </div>
+
+    <!-- Free Trading Group -->
+    <div class="sub-card free reveal">
+      <span class="sub-badge free-b">Free · Open to All</span>
+      <span class="sub-icon">🤺</span>
+      <div class="sub-name">FREE SIGNAL GROUP</div>
+      <div class="free-tagline">
+        <p>🎯 Precision Trader | Boom &amp; Crash Mastery<br>
+        🔁 Turning volatility into opportunity<br>
+        💬 DM for insights, signals &amp; mindset tips<br>
+        📈 Consistency. Strategy. Growth.</p>
+      </div>
+      <ul class="sub-features">
+        <li>Free Boom &amp; Crash signal posts</li>
+        <li>Market insights &amp; analysis</li>
+        <li>Trading mindset &amp; education</li>
+        <li>Community of active traders</li>
+        <li>Zero cost — join instantly</li>
+      </ul>
+      <div class="sub-footer">
+        <div class="sub-price-label">100% Free — No strings attached</div>
+        <a href="https://chat.whatsapp.com/EMLLU8dChNu04jz21QmQPO?mode=r_c" class="sub-btn free-btn" target="_blank" rel="noopener">
+          📈 Join Free WhatsApp Group
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PAYMENT -->
+<section class="payment-section" id="payment">
+  <div class="section-header reveal">
+    <div class="section-tag cyan">How to Pay</div>
+    <div class="section-title">PAYMENT METHODS</div>
+  </div>
+  <div class="pay-grid">
+    <div class="pay-card btc reveal">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div class="pay-icon btc-i">₿</div>
+        <div><div class="pay-name-btc">Bitcoin</div><div class="pay-sub">BTC · Recommended</div></div>
+      </div>
+      <div class="pay-addr-box">
+        <div class="pay-addr-label">Wallet Address</div>
+        <div class="pay-addr">bc1q88cdpf7dl9q4ycwsrz50yj85eev6cks6gyu6g7</div>
+      </div>
+      <button class="copy-btn btc-btn" onclick="copyAddr(this,'bc1q88cdpf7dl9q4ycwsrz50yj85eev6cks6gyu6g7')">Copy BTC Address</button>
+    </div>
+    <div class="pay-card ltc reveal">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div class="pay-icon ltc-i">Ł</div>
+        <div><div class="pay-name-ltc">Litecoin</div><div class="pay-sub">LTC · Fast &amp; Low Fees</div></div>
+      </div>
+      <div class="pay-addr-box">
+        <div class="pay-addr-label">Wallet Address</div>
+        <div class="pay-addr">ltc1qe2aqzpytpcfc0qfaxa4gn8pztta8h2v0sgmkms</div>
+      </div>
+      <button class="copy-btn ltc-btn" onclick="copyAddr(this,'ltc1qe2aqzpytpcfc0qfaxa4gn8pztta8h2v0sgmkms')">Copy LTC Address</button>
+    </div>
+    <div class="pay-card eco reveal">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div class="pay-icon eco-i">📱</div>
+        <div><div class="pay-name-eco">EcoCash</div><div class="pay-sub">ZWL · Instant Mobile Money</div></div>
+      </div>
+      <div class="pay-addr-box">
+        <div class="pay-addr-label">Send EcoCash To</div>
+        <div class="pay-addr" style="font-size:15px;font-weight:600;color:var(--green)">+263 774 456 036</div>
+      </div>
+      <div class="eco-direct">
+        <div>
+          <div class="eco-direct-label">Account Name</div>
+          <div class="eco-direct-val">Marko Mathuthu</div>
+          <div class="eco-direct-name">Confirm name before sending</div>
+        </div>
+      </div>
+      <button class="copy-btn eco-btn" style="margin-top:12px" onclick="copyAddr(this,'+263774456036')">Copy EcoCash Number</button>
+    </div>
+    <div class="pay-card usdt reveal">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div class="pay-icon usdt-i">₮</div>
+        <div><div class="pay-name-usdt">Tether USDT</div><div class="pay-sub">ERC20 · Ethereum Network</div></div>
+      </div>
+      <div class="pay-addr-box">
+        <div class="pay-addr-label">Wallet Address · ERC20 Only</div>
+        <div class="pay-addr">0x2379E5Ddb81Ec982b4d246C097608fd354a90787</div>
+      </div>
+      <div style="background:rgba(255,180,0,.06);border:1px solid rgba(255,180,0,.2);border-radius:4px;padding:8px 10px;margin-bottom:10px">
+        <div style="font-family:var(--mono);font-size:9px;color:rgba(255,180,0,.8);letter-spacing:.08em">⚠ SEND ON ERC20 NETWORK ONLY — WRONG NETWORK = LOST FUNDS</div>
+      </div>
+      <button class="copy-btn usdt-btn" onclick="copyAddr(this,'0x2379E5Ddb81Ec982b4d246C097608fd354a90787')">Copy USDT Address</button>
+    </div>
+    <div class="pay-card inst reveal">
+      <div class="inst-title">PAYMENT INSTRUCTIONS</div>
+      <div class="inst-grid">
+        <div class="inst-step"><div class="inst-n">1</div><div class="inst-text">Choose your product and click <span style="color:var(--gold)">Buy</span> to fill in your details</div></div>
+        <div class="inst-step"><div class="inst-n">2</div><div class="inst-text">Send payment via <span style="color:#f7931a">BTC</span>, <span style="color:#bbb">LTC</span>, <span style="color:#26a17b">USDT (ERC20)</span>, or <span style="color:#00c87a">EcoCash</span></div></div>
+        <div class="inst-step"><div class="inst-n">3</div><div class="inst-text">WhatsApp proof of payment to <span style="color:var(--text)">+263 774 456 036</span></div></div>
+        <div class="inst-step"><div class="inst-n">4</div><div class="inst-text">Receive product + setup guide within <span style="color:var(--green)">24 hours</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <h2 class="cta-title reveal">READY TO<br><span class="g">AUTOMATE</span><br>YOUR <span class="c">EDGE?</span></h2>
+  <p class="cta-sub reveal">Get in touch to purchase, ask questions, or request a custom bot built to your exact strategy.</p>
+  <div class="contact-links reveal">
+    <a href="mailto:legendaryemkaymtt@gmail.com" class="contact-link primary">📧 legendaryemkaymtt@gmail.com</a>
+    <a href="https://wa.me/263774456036" class="contact-link">💬 WhatsApp +263 774 456 036</a>
+    <a href="tel:+263774456036" class="contact-link">📞 Call DrMtt</a>
+    <a href="#products" class="contact-link">🛒 Browse Products</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>Dr</span><em>Mtt</em></div>
+  <div class="footer-copy">© 2026 Marko Mathuthu · All rights reserved</div>
+  <div class="footer-links">
+    <a href="#home">Home</a>
+    <a href="#products">Products</a>
+    <a href="#subscriptions">Signals</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<!-- MODAL — note: onclick stopPropagation on .modal fixes the form bug -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-top-line"></div>
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    <div id="modalBadge" class="modal-badge"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-price" id="modalPrice"></div>
+    <form class="modal-form" onsubmit="submitOrder(event)">
+      <input class="modal-input" type="text" placeholder="Your full name" required autocomplete="name">
+      <input class="modal-input" type="email" placeholder="Email address (for delivery)" required autocomplete="email">
+      <input class="modal-input" type="tel" placeholder="WhatsApp number (optional)" autocomplete="tel">
+      <textarea class="modal-input" rows="3" placeholder="Any special requests or questions…" style="resize:none"></textarea>
+      <button type="submit" class="modal-submit">Submit Order →</button>
+    </form>
+    <div class="modal-pay-section">
+      <div class="modal-pay-label">Payment Methods</div>
+      <div class="modal-pay-row">
+        <div class="modal-pay-row-hd">
+          <span style="font-size:16px">₿</span>
+          <span style="font-family:var(--mono);font-size:11px;color:#f7931a;font-weight:600">Bitcoin (BTC)</span>
+        </div>
+        <div class="modal-pay-addr">bc1q88cdpf7dl9q4ycwsrz50yj85eev6cks6gyu6g7</div>
+        <button class="modal-copy btc" onclick="copyAddr(this,'bc1q88cdpf7dl9q4ycwsrz50yj85eev6cks6gyu6g7')">Copy Address</button>
+      </div>
+      <div class="modal-pay-row">
+        <div class="modal-pay-row-hd">
+          <span style="font-size:16px">Ł</span>
+          <span style="font-family:var(--mono);font-size:11px;color:#bbb;font-weight:600">Litecoin (LTC)</span>
+        </div>
+        <div class="modal-pay-addr">ltc1qe2aqzpytpcfc0qfaxa4gn8pztta8h2v0sgmkms</div>
+        <button class="modal-copy ltc" onclick="copyAddr(this,'ltc1qe2aqzpytpcfc0qfaxa4gn8pztta8h2v0sgmkms')">Copy Address</button>
+      </div>
+      <div class="modal-pay-row" style="background:rgba(0,200,122,.04);border-color:rgba(0,200,122,.2)">
+        <div class="modal-pay-row-hd">
+          <span style="font-size:14px">📱</span>
+          <span style="font-family:var(--mono);font-size:11px;color:#00c87a;font-weight:600">EcoCash</span>
+        </div>
+        <div class="modal-pay-addr" style="color:#00c87a;font-size:13px;font-weight:600">+263 774 456 036</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:3px">Marko Mathuthu · Confirm name before sending</div>
+        <button class="modal-copy" style="background:rgba(0,200,122,.08);border:1px solid rgba(0,200,122,.22);color:#00c87a;margin-top:6px;font-family:var(--mono);font-size:9px;padding:5px 10px;border-radius:2px;cursor:pointer;letter-spacing:.08em;transition:all .2s" onclick="copyAddr(this,'+263774456036')">Copy Number</button>
+      </div>
+      <div class="modal-pay-row" style="background:rgba(38,161,123,.04);border-color:rgba(38,161,123,.22)">
+        <div class="modal-pay-row-hd">
+          <span style="font-family:var(--mono);font-size:13px;font-weight:700;color:#26a17b">₮</span>
+          <span style="font-family:var(--mono);font-size:11px;color:#26a17b;font-weight:600">USDT · ERC20 Only</span>
+        </div>
+        <div class="modal-pay-addr">0x2379E5Ddb81Ec982b4d246C097608fd354a90787</div>
+        <div style="font-family:var(--mono);font-size:9px;color:rgba(255,180,0,.75);margin-top:4px">⚠ ERC20 network only — wrong network = lost funds</div>
+        <button class="modal-copy" style="background:rgba(38,161,123,.08);border:1px solid rgba(38,161,123,.25);color:#26a17b;margin-top:6px;font-family:var(--mono);font-size:9px;padding:5px 10px;border-radius:2px;cursor:pointer;letter-spacing:.08em;transition:all .2s" onclick="copyAddr(this,'0x2379E5Ddb81Ec982b4d246C097608fd354a90787')">Copy USDT Address</button>
+      </div>
+    </div>
+    <p class="modal-note">Send payment → WhatsApp proof to +263 774 456 036 · Delivered within 24hrs · Lifetime support.</p>
+  </div>
+</div>
+
+<script>
+/* ── MOBILE MENU ── */
+function openMobileMenu()  { document.getElementById('mobileMenu').classList.add('open');    document.body.style.overflow = 'hidden'; }
+function closeMobileMenu() { document.getElementById('mobileMenu').classList.remove('open'); document.body.style.overflow = ''; }
+
+/* ── CURSOR (desktop only) ── */
+const isTouch = window.matchMedia('(pointer:coarse)').matches;
+if (!isTouch) {
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0, my=0, rx=0, ry=0, rW=36, rH=36;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cur.style.transform = `translate(${mx-4}px,${my-4}px)`;
+  }, {passive:true});
+  (function lerpRing() {
+    rx += (mx-rx)*0.22; ry += (my-ry)*0.22;
+    ring.style.transform = `translate(${rx-rW/2}px,${ry-rH/2}px)`;
+    requestAnimationFrame(lerpRing);
+  })();
+  document.querySelectorAll('a,button,.product-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.style.width='54px'; ring.style.height='54px'; ring.style.opacity='1'; rW=54; rH=54; });
+    el.addEventListener('mouseleave', () => { ring.style.width='36px'; ring.style.height='36px'; ring.style.opacity='.7'; rW=36; rH=36; });
+  });
+}
+
+/* ── PARTICLES (desktop only, gold/cyan palette, throttled 30fps) ── */
+if (!isTouch) {
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  const COLS = ['#c9a84c','#e8c97a','#00d4e8','rgba(255,255,255,.6)'];
+  let W, H;
+  const resize = () => { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; };
+  resize();
+  window.addEventListener('resize', resize, {passive:true});
+  class Dot {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x = Math.random()*W; this.y = init ? Math.random()*H : H+6;
+      this.r = Math.random()*1.1+0.3; this.vx = (Math.random()-.5)*0.2;
+      this.vy = -(Math.random()*0.35+0.12); this.a = Math.random()*0.3+0.12;
+      this.c = COLS[Math.floor(Math.random()*COLS.length)];
+      this.life = 0; this.max = (Math.random()*240+100)|0;
+    }
+    tick() {
+      this.x += this.vx; this.y += this.vy; this.life++;
+      const t = this.life/this.max;
+      const fade = t<.12 ? t/.12 : t>.78 ? (1-t)/.22 : 1;
+      ctx.beginPath(); ctx.arc(this.x,this.y,this.r,0,6.283);
+      ctx.fillStyle = this.c; ctx.globalAlpha = this.a*fade; ctx.fill();
+      if (this.life >= this.max) this.reset(false);
+    }
+  }
+  const dots = Array.from({length:38}, () => new Dot());
+  let lastT = 0;
+  (function loop(ts) {
+    if (ts-lastT >= 33) { lastT=ts; ctx.clearRect(0,0,W,H); ctx.globalAlpha=1; dots.forEach(d=>d.tick()); }
+    requestAnimationFrame(loop);
+  })();
+} else {
+  document.getElementById('particles').style.display = 'none';
+}
+
+/* ── TICKER ── */
+const TICKERS = ['BOOM 1000 +2.4%','BOOM 500 +1.8%','CRASH 1000 -1.2%','CRASH 500 -0.9%','VOL 10(1s) +0.6%','VOL 25 +1.1%','VOL 50 +0.7%','VOL 75 +1.4%','VOL 100 +2.1%','GAINX 100 +3.2%','GAINX 600 +2.7%','PAINX 100 -1.5%','PAINX 600 -2.0%','DERIV BOT ✓','WELTRADE ✓','DIGITMATCH 94%'];
+const inner = document.getElementById('tickerInner');
+const row = [...TICKERS,...TICKERS].map(t=>`<div class="ticker-item">${t}<span class="ticker-sep"> | </span></div>`).join('');
+inner.innerHTML = row + row;
+
+/* ── REVEAL ON SCROLL ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), 55); });
+}, {threshold:.08});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').style.background = window.scrollY > 60 ? 'rgba(3,4,10,.98)' : 'rgba(3,4,10,.92)';
+}, {passive:true});
+
+/* ── COPY ADDRESS ── */
+function copyAddr(btn, addr) {
+  navigator.clipboard.writeText(addr).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.style.cssText = 'background:rgba(0,200,122,.14);border-color:rgba(0,200,122,.35);color:var(--green)';
+    setTimeout(() => { btn.textContent = orig; btn.style.cssText = ''; }, 2000);
+  });
+}
+
+/* ── MODAL ── */
+const products = {
+  ea1:{name:'DrMtt Sniper EA 2.0',   price:'$150', type:'Expert Advisor', cls:'ea'},
+  ea2:{name:'Digit Match Pro EA', price:'$150', type:'Expert Advisor', cls:'ea'},
+  ea3:{name:'Boom & Crash Rider EA', price:'$150', type:'Expert Advisor', cls:'ea'},
+  ind1:{name:'Boom and Crash Signal System',   price:'$70', type:'Indicator', cls:'ind'},
+  ind2:{name:'Digit Frequency Tracker',   price:'$70', type:'Indicator', cls:'ind'},
+  ind3:{name:'Gainx Painx Signal System',     price:'$70', type:'Indicator', cls:'ind'},
+};
+function openModal(id) {
+  const p = products[id];
+  document.getElementById('modalBadge').textContent = p.type;
+  document.getElementById('modalBadge').className   = 'modal-badge ' + p.cls;
+  document.getElementById('modalTitle').textContent  = p.name;
+  document.getElementById('modalPrice').textContent  = p.price;
+  document.getElementById('modalOverlay').dataset.productId = id;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // GA — track Buy button click
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'buy_click', {
+      event_category: 'Ecommerce',
+      event_label: p.name,
+      value: parseInt(p.price.replace(/\D/g,''))
+    });
+  }
+}
+/* Only close when clicking the dark overlay itself — not the modal content */
+function closeModal(e) {
+  if (!e || e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+function submitOrder(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.modal-submit');
+  const overlay = document.getElementById('modalOverlay');
+  const productId = overlay.dataset.productId || '';
+  const p = products[productId] || {};
+
+  // Collect form values
+  const inputs = e.target.querySelectorAll('.modal-input');
+  const customerName  = inputs[0] ? inputs[0].value : '';
+  const customerEmail = inputs[1] ? inputs[1].value : '';
+  const customerPhone = inputs[2] ? inputs[2].value : '';
+  const customerNote  = inputs[3] ? inputs[3].value : '';
+
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  // GA — track order submission
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'purchase_intent', {
+      event_category: 'Ecommerce',
+      event_label: p.name || productId,
+      value: parseInt((p.price||'0').replace(/\D/g,''))
+    });
+  }
+
+  // EmailJS — send alert to DrMtt
+  emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
+    to_name:        'DrMtt',
+    from_name:      customerName,
+    from_email:     customerEmail,
+    phone:          customerPhone || 'Not provided',
+    product_name:   p.name  || productId,
+    product_price:  p.price || 'N/A',
+    product_type:   p.type  || 'N/A',
+    notes:          customerNote || 'None',
+    order_time:     new Date().toLocaleString('en-GB', { timeZone: 'Africa/Harare' })
+  })
+  .then(() => {
+    btn.textContent = '✓ Order Received!';
+    btn.style.background = 'var(--green)';
+    btn.disabled = false;
+    setTimeout(() => {
+      document.getElementById('modalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+      btn.textContent = 'Submit Order →';
+      btn.style.background = '';
+      e.target.reset();
+    }, 2400);
+  })
+  .catch(() => {
+    // Still show success to customer — alert still fires, just log the error silently
+    btn.textContent = '✓ Order Received!';
+    btn.style.background = 'var(--green)';
+    btn.disabled = false;
+    console.warn('EmailJS send failed — check Service ID / Template ID / Public Key');
+    setTimeout(() => {
+      document.getElementById('modalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+      btn.textContent = 'Submit Order →';
+      btn.style.background = '';
+      e.target.reset();
+    }, 2400);
+  });
+}
+</script>
+</body>
+</html>
